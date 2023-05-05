@@ -5,7 +5,7 @@
  */
 const loginrouter = require("express").Router();
 const SignupModel = require("../Models/signup");
-const { compareStrings } = require("../Utils/AuthUtils");
+const { compareStrings, generateJSONToken } = require("../Utils/AuthUtils");
 
 /**
  * LOGIN USER
@@ -23,6 +23,10 @@ loginrouter.post("/", async (request, response, next) => {
       //GET OTP FROM OTP GENERATOR -> GIVE US OTP -> SEND OTP -> SAME WE WILL STORE IN USER RECENT OTP
       return response.status(200).json({
         success: true,
+        token: await generateJSONToken({
+          name: userExistingData?.userName,
+          role: "user",
+        }),
         message: "Logged in successfully!!!",
       });
     } else {
@@ -43,5 +47,6 @@ loginrouter.post("/", async (request, response, next) => {
 //STEP 1: VALIDATE USER -> userEmailID -> url
 //STEP 2: IF USER HAS ACCOUNT SEND URL TO USER
 //STEP 3: IF NO UISER SEND CREATE ACCOUNT MESSAGE
+// password@123
 
 module.exports = loginrouter;
